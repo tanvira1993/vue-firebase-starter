@@ -6,7 +6,6 @@
 
 <script>
 import ToDo from './components/to-do'
-
 export default {
   components: {
     ToDo
