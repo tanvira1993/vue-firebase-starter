@@ -1,0 +1,19 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "boards",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "boardId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "boardId",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
