@@ -139,6 +139,7 @@ export default {
         .delete()
         .then((res) => {
           console.warn(res);
+          alert(" delete success!");
           this.boards = [];
           this.getBoards();
         });
@@ -165,6 +166,7 @@ export default {
         .update(this.board)
         .then((res) => {
           console.warn(res);
+          alert("update success!");
           this.boards = [];
           this.update = false;
           this.getBoards();
