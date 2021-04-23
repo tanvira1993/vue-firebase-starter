@@ -71,7 +71,7 @@
       </v-card-actions>
     </v-card>
     <h1 v-if="login === true">Home</h1>
-    <v-btn v-if="login === true" color="error" @click="Signout">
+    <v-btn @click="Signout()" v-if="login === true" color="error">
       Signout
     </v-btn>
   </v-app>
@@ -173,22 +173,22 @@ export default {
           });
       }
     },
-  },
-  Signout() {
-    console.log("sign out");
-    let user = firebase.auth().currentUser;
-    console.log("okoko", user);
-    firebase
-      .auth()
-      .signOut()
-      .then((res) => {
-        console.log("success", res);
-        alert("Logout success!");
-        this.login = false;
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
+    Signout() {
+      console.log("sign out");
+      let user = firebase.auth().currentUser;
+      console.log("okoko", user);
+      firebase
+        .auth()
+        .signOut()
+        .then((res) => {
+          console.log("success", res);
+          alert("Logout success!");
+          this.login = false;
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+    },
   },
 };
 </script>
