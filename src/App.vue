@@ -1,14 +1,14 @@
 <template>
   <div>
-    <ToDo/>
+    <Auth/>
   </div>
 </template>
 
 <script>
-import ToDo from './components/to-do'
+import Auth from './components/auth'
 export default {
   components: {
-    ToDo
+    Auth
   }
 }
 </script>
