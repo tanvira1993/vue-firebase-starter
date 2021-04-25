@@ -74,6 +74,19 @@
     <v-btn @click="Signout()" v-if="login === true" color="error">
       Signout
     </v-btn>
+    <v-card style="margin: 20px">
+    <v-file-input
+      accept="image/png, image/jpeg, image/bmp"
+      small-chips
+      multiple
+      label="File input w/ small chips"
+      @change="handleImage"
+
+    ></v-file-input>
+    <v-btn @click="uploadImage()"  color="success">
+      Upload
+    </v-btn>
+  </v-card>
   </v-app>
 </template>
 
@@ -83,7 +96,11 @@ import firebase from "firebase";
 export default {
   name: "Auth",
   data: function() {
+    
     return {
+      rules: [
+        value => !value || value.size < 5000000 || 'Avatar size should be less than 5 MB!',
+      ],
       signup: {
         email: "",
         password: "",
@@ -93,6 +110,7 @@ export default {
         password: "",
       },
       login: false,
+      files:[]
     };
   },
 
@@ -189,6 +207,39 @@ export default {
           console.log("err", err);
         });
     },
+    handleImage(e){ 
+      this.files = []     
+      let length = e.length
+      for(let i =0; i<length; i++){
+        this.files.push(e[i])
+      }
+      console.log("images",this.files) 
+    },
+
+    uploadImage(){
+      console.log("image upload")
+      for(let i =0; i<this.files.length; i++){
+      let storageRef = firebase.storage().ref('images/'+ Math.random() + '_'  + this.files[i].name);
+       let uploadTask =storageRef.put(this.files[i]);
+       console.log('chk',this.files[i])
+       uploadTask.on('state_changed', (snapshot) => {
+            console.warn(snapshot)
+          }, (error) => {
+            console.warn(error)
+            // Handle unsuccessful uploads
+          }, () => {
+            // Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+            
+            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+              // this.product.images.push(downloadURL);
+              console.log("download url",downloadURL)
+            });
+          });
+      }
+      alert("upload success!")
+
+    }
   },
 };
 </script>
