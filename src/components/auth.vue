@@ -75,18 +75,17 @@
       Signout
     </v-btn>
     <v-card style="margin: 20px">
-    <v-file-input
-      accept="image/png, image/jpeg, image/bmp"
-      small-chips
-      multiple
-      label="File input w/ small chips"
-      @change="handleImage"
-
-    ></v-file-input>
-    <v-btn @click="uploadImage()"  color="success">
-      Upload
-    </v-btn>
-  </v-card>
+      <v-file-input
+        accept="image/png, image/jpeg, image/bmp"
+        small-chips
+        multiple
+        label="File input w/ small chips"
+        @change="handleImage"
+      ></v-file-input>
+      <v-btn @click="uploadImage()" color="success">
+        Upload
+      </v-btn>
+    </v-card>
   </v-app>
 </template>
 
@@ -96,10 +95,12 @@ import firebase from "firebase";
 export default {
   name: "Auth",
   data: function() {
-    
     return {
       rules: [
-        value => !value || value.size < 5000000 || 'Avatar size should be less than 5 MB!',
+        (value) =>
+          !value ||
+          value.size < 5000000 ||
+          "Avatar size should be less than 5 MB!",
       ],
       signup: {
         email: "",
@@ -110,11 +111,11 @@ export default {
         password: "",
       },
       login: false,
-      files:[]
+      files: [],
     };
   },
 
-  onBeforeMount() {
+  mounted() {
     firebase.auth().onAuthStateChanged((user) => {
       if (!user) {
         console.log("Unauthenticated!");
@@ -122,11 +123,39 @@ export default {
       } else {
         console.log("Authenticated!");
         this.login = true;
+        let user = firebase.auth().currentUser;
+        let name, email, photoUrl, uid, emailVerified;
+
+        if (user != null) {
+          name = user.displayName;
+          email = user.email;
+          photoUrl = user.photoURL;
+          emailVerified = user.emailVerified;
+          uid = user.uid; // The user's ID, unique to the Firebase project. Do NOT use
+          // this value to authenticate with your backend server, if
+          // you have one. Use User.getToken() instead.
+        }
+        console.log("profile", name, email, photoUrl, uid, emailVerified);
+
+        let profiler = firebase.auth().currentUser;
+
+        profiler
+          .updateProfile({
+            displayName: "Jane Q. User",
+            photoURL:
+              "https://firebasestorage.googleapis.com/v0/b/retreat-41189.appspot.com/o/profile_Pics%2F0.1959675836578305_Signature.jpg?alt=media&token=047863c6-a011-497f-8eb9-a15390d6792d",
+          })
+          .then(function() {
+            // Update successful.
+          })
+          .catch(function() {
+            // An error happened.
+          });
       }
     });
   },
 
-  mounted() {
+  beforeCreate() {
     const config = {
       apiKey: "AIzaSyDXZYp6nrvvlqTXCfcO61fcfDg6wVrPGIA",
       authDomain: "vue-firebase-6f2e8.firebaseapp.com",
@@ -207,39 +236,45 @@ export default {
           console.log("err", err);
         });
     },
-    handleImage(e){ 
-      this.files = []     
-      let length = e.length
-      for(let i =0; i<length; i++){
-        this.files.push(e[i])
+    handleImage(e) {
+      this.files = [];
+      let length = e.length;
+      for (let i = 0; i < length; i++) {
+        this.files.push(e[i]);
       }
-      console.log("images",this.files) 
+      console.log("images", this.files);
     },
 
-    uploadImage(){
-      console.log("image upload")
-      for(let i =0; i<this.files.length; i++){
-      let storageRef = firebase.storage().ref('images/'+ Math.random() + '_'  + this.files[i].name);
-       let uploadTask =storageRef.put(this.files[i]);
-       console.log('chk',this.files[i])
-       uploadTask.on('state_changed', (snapshot) => {
-            console.warn(snapshot)
-          }, (error) => {
-            console.warn(error)
+    uploadImage() {
+      console.log("image upload");
+      for (let i = 0; i < this.files.length; i++) {
+        let storageRef = firebase
+          .storage()
+          .ref("images/" + Math.random() + "_" + this.files[i].name);
+        let uploadTask = storageRef.put(this.files[i]);
+        console.log("chk", this.files[i]);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            console.warn(snapshot);
+          },
+          (error) => {
+            console.warn(error);
             // Handle unsuccessful uploads
-          }, () => {
+          },
+          () => {
             // Handle successful uploads on complete
             // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-            
+
             uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
               // this.product.images.push(downloadURL);
-              console.log("download url",downloadURL)
+              console.log("download url", downloadURL);
             });
-          });
+          }
+        );
       }
-      alert("upload success!")
-
-    }
+      alert("upload success!");
+    },
   },
 };
 </script>
