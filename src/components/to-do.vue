@@ -26,12 +26,7 @@
               </v-col>
 
               <v-col cols="12" md="4">
-                <v-text-field
-                  v-model="board.body"
-                  :rules="nameRules"
-                  label="Body"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="board.body" :rules="nameRules" label="Body" required></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -40,23 +35,17 @@
             justify="center"
             @click="saveBoard()"
             v-if="updateCheck == false"
-            >Add
-          </v-btn>
+          >Add</v-btn>
           <v-btn
             color="success"
             justify="center"
             @click="update()"
             v-if="updateCheck == true"
-            >Update
-          </v-btn>
+          >Update</v-btn>
         </v-form>
       </div>
       <div style="margin: 50px">
-        <List
-          :data="boards"
-          @deleteData="deleteBoard($event)"
-          @editData="getBoard($event)"
-        />
+        <List :data="boards" @deleteData="deleteBoard($event)" @editData="getBoard($event)" />
       </div>
     </v-app>
   </div>
@@ -68,7 +57,7 @@ import List from "../components/list";
 export default {
   name: "ToDo",
   components: {
-    List,
+    List
   },
   data: function() {
     return {
@@ -79,17 +68,17 @@ export default {
         body: "",
         title: "",
         name: "",
-        id: "",
+        id: ""
       },
       nameRules: [
-        (v) => !!v || "Name is required",
-        (v) => v.length <= 10 || "Name must be less than 10 characters",
+        v => !!v || "Name is required",
+        v => v.length <= 10 || "Name must be less than 10 characters"
       ],
       updateBoard: {
         body: "",
         title: "",
-        name: "",
-      },
+        name: ""
+      }
     };
   },
   created() {
@@ -99,13 +88,14 @@ export default {
     getBoards() {
       db.collection("boards")
         .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
+        .then(querySnapshot => {
+          console.log("querySnapshot", querySnapshot.docs.length);
+          querySnapshot.forEach(doc => {
             let modifyData = {
               name: doc.data().name,
               title: doc.data().title,
               body: doc.data().body,
-              id: doc.id,
+              id: doc.id
             };
             this.boards.push(modifyData);
           });
@@ -127,7 +117,7 @@ export default {
           body: "",
           title: "",
           name: "",
-          id: "",
+          id: ""
         };
         this.getBoards();
       }
@@ -137,7 +127,7 @@ export default {
       db.collection("boards")
         .doc(id)
         .delete()
-        .then((res) => {
+        .then(res => {
           console.warn(res);
           alert(" delete success!");
           this.boards = [];
@@ -155,7 +145,7 @@ export default {
           name: doc.data().name,
           title: doc.data().title,
           body: doc.data().body,
-          id: id,
+          id: id
         };
         this.updateCheck = true;
       }
@@ -164,15 +154,15 @@ export default {
       db.collection("boards")
         .doc(this.board.id)
         .update(this.board)
-        .then((res) => {
+        .then(res => {
           console.warn(res);
           alert("update success!");
           this.boards = [];
           this.update = false;
           this.getBoards();
         });
-    },
-  },
+    }
+  }
 };
 </script>
 
