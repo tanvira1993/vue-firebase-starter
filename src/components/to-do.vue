@@ -12,6 +12,7 @@
                   :counter="10"
                   label="Name"
                   required
+                  id="name"
                 ></v-text-field>
               </v-col>
 
@@ -21,18 +22,26 @@
                   :rules="nameRules"
                   :counter="10"
                   label="Title"
+                  id="title"
                   required
                 ></v-text-field>
               </v-col>
 
               <v-col cols="12" md="4">
-                <v-text-field v-model="board.body" :rules="nameRules" label="Body" required></v-text-field>
+                <v-text-field
+                  v-model="board.body"
+                  id="body"
+                  :rules="nameRules"
+                  label="Body"
+                  required
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
           <v-btn
             color="success"
             justify="center"
+            id="button"
             @click="saveBoard()"
             v-if="updateCheck == false"
           >Add</v-btn>
@@ -71,8 +80,8 @@ export default {
         id: ""
       },
       nameRules: [
-        v => !!v || "Name is required",
-        v => v.length <= 10 || "Name must be less than 10 characters"
+        v => !!v || "Name is required"
+        // v => v.length <= 10 || "Name must be less than 10 characters"
       ],
       updateBoard: {
         body: "",
@@ -111,7 +120,7 @@ export default {
         alert("Fields are empty!!");
       } else {
         db.collection("boards").add(this.board);
-        alert("success!");
+        // alert("success!");
         this.boards = [];
         this.board = {
           body: "",

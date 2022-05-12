@@ -1,40 +1,31 @@
-import { mount, createLocalVue } from "@vue/test-utils";
-import Home from "@/views/";
-import Vuetify from "vuetify";
+import { mount } from "@vue/test-utils";
+import HelloWorld from "@/components/to-do.vue";
+const puppeteer = require("puppeteer");
 
 //basic test to check it is a vue instance
-describe("HelloWorld.vue", () => {
+describe("to-do.vue", () => {
   it("check vue apps", () => {
-    const wrapper = mount(Home, {});
+    const wrapper = mount(HelloWorld, {});
     expect(wrapper.isVueInstance()).toBeTruthy();
   });
 });
 
-describe("Home.vue", () => {
-  const localVue = createLocalVue();
-  let vuetify;
-
-  beforeEach(() => {
-    vuetify = new Vuetify();
+// end 2 end test for saveBoard()
+test("checking e2e for saveBoard", async (done) => {
+  const browser = await puppeteer.launch({
+    headless: false,
+    slowMo: 80,
+    args: ["--window-size=1920,1080"],
   });
-
-  it("should have a custom title and match snapshot", () => {
-    const wrapper = mount(Home, {
-      localVue,
-      vuetify,
-      propsData: { profile_model: { id: 1, name: "John Doe" } },
-    });
-
-    // With jest we can create snapshot files of the HTML output
-    expect(wrapper.html()).toMatchSnapshot();
-
-    // We could also verify this differently
-    // by checking the text content
-    // const title = wrapper.find(".v-card__title > span");
-    // const title = wrapper.find(".vue-form-generator");
-    // vue-form-generator
-    // console.log("tetete", title);
-    const title = "John Doe";
-    expect(title).toBe("John Doe");
-  });
-});
+  const page = await browser.newPage();
+  await page.goto("http://127.0.0.1:8146/");
+  await page.click("#name");
+  await page.type("#name", "name");
+  await page.click("#title");
+  await page.type("#title", "Article 1");
+  await page.click("#body");
+  await page.type("#body", "Body test");
+  await page.click("#button");
+  await browser.close();
+  done();
+}, 40000);
