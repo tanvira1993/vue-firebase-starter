@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@main
+      - name: Cache clear
+        uses: npm cache clear --force
       - name: Install dependencies
         run: npm install
       - name: Build dependencies
@@ -40,5 +42,5 @@ jobs:
         with:
           args: deploy --only hosting:vue-firebase-6f2e8
         env:
-#           FIREBASE_TOKEN: $1//0g45sMgLLYP71CgYIARAAGBASNwF-L9IrNHUaSue5Z5iPjZKRH4RXWAGUZh_zWLB0kCDowIMyGKUesvuLX-jjELuo7oIdNz3D5As
+          #           FIREBASE_TOKEN: $1//0g45sMgLLYP71CgYIARAAGBASNwF-L9IrNHUaSue5Z5iPjZKRH4RXWAGUZh_zWLB0kCDowIMyGKUesvuLX-jjELuo7oIdNz3D5As
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
