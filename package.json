@@ -14,8 +14,7 @@
     "puppeteer": "^14.0.0",
     "vue": "^2.6.11",
     "vue-router": "^3.5.1",
-    "vuetify": "^2.4.11",
-    "webpack": "^4.45.0"
+    "vuetify": "^2.4.11"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
