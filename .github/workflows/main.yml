@@ -21,8 +21,6 @@ jobs:
         run: yarn install
       - name: Build dependencies
         run: yarn build
-      - name: Run and test app
-        run: yarn test:unit
       - name: Archive production artifact
         uses: actions/upload-artifact@master
         with:
