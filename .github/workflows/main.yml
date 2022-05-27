@@ -45,7 +45,9 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         
         with:
-          args: deploy --only hosting:vue-firebase-6f2e8
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CLINICDX }}'
+          projectId: [your project id]
         env:
           #           FIREBASE_TOKEN: $1//0g45sMgLLYP71CgYIARAAGBASNwF-L9IrNHUaSue5Z5iPjZKRH4RXWAGUZh_zWLB0kCDowIMyGKUesvuLX-jjELuo7oIdNz3D5As
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
