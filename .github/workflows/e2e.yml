@@ -1,0 +1,32 @@
+# 任意のワークフロー名
+name: End-to-end tests
+on: [push]
+jobs:
+  cypress-run:
+    runs-on: ubuntu-20.04
+    steps:
+      # https://github.com/actions/checkout
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # 
+      - name: Start App
+        run: |
+          yarn
+          yarn build
+          yarn start &
+
+      # cypress-io/github-action@v2
+      - uses: cypress-io/github-action@v2
+        with:
+          wait-on: "http://localhost:8080"
+          working-directory: e2e
+
+      # 任意
+      # Cypress can save video
+      # 参考: https://github.com/cypress-io/github-action#artifacts
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Cypress E2E Videos
+          path: e2e/cypress/videos
